@@ -21,9 +21,10 @@ var userSchema = new schema({
         type: String,
         required: true
     },//*,
-    events: {
-        type: Array
-    }
+    eventIds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'events'
+    }]
     //add collection of events
     /*events: Array*/
 });

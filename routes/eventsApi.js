@@ -47,13 +47,28 @@ router.route('/events/:id')
 
 //returns one event
 .get(function(req, res) {
-    Event.findById(req.params.id, function(err, event) {
-        if (err) {
-            return res.send(err);
-        }
-        res.send(event);
-    });
+    Event.findById(req.params.id)
+        .populate('scheduleIds')
+        .exec(function(error, schedules) {
+            console.log(JSON.stringify(schedules, null, "\t"))
+        }).then(function(err, event) {
+            if (err) {
+                return res.send(err);
+            }
+            res.send(event);
+        });
 })
+
+// post.save(function(error) {
+//     if (!error) {
+//         Post.find({})
+//             .populate('postedBy')
+//             .populate('comments.postedBy')
+//             .exec(function(error, posts) {
+//                 console.log(JSON.stringify(posts, null, "\t"))
+//             })
+//     }
+// });
 
 //updates an event
 .put(function(req, res) {

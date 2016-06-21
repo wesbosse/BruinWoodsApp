@@ -34,7 +34,7 @@ var eventSchema = new schema({
         required: true
     },
     //point to schedule
-    schedules: [{
+    scheduleIds: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'schedule'
     }]
