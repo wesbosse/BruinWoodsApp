@@ -15,9 +15,20 @@ router.use(function(req, res, next) {
     }
 });
 
-/*router.route('schedules')
-	.post(function(req, res) {
-		
-	})*/
+router.route('/schedules')
+    .post(function(req, res) {
+        schedule = new Schedule();
+        schedule.name = req.body.name;
+        schedule.created_By = req.user.username;
+        schedule.startDate = req.body.startDate;
+        schedule.endDate = req.body.endDate;
+
+        schedule.save(function(err, schedule) {
+            if (err) {
+                return res.send(500, err);
+            }
+            return res.json(schedule);
+        })
+    })
 
 module.exports = router;

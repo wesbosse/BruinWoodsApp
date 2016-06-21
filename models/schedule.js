@@ -11,10 +11,6 @@ var scheduleSchema = new schema({
 		type: String,
 		required: true
 	},
-	username: {
-		type: String,
-		required: true
-	},
 	startDate: {
 		type: Date,
 		required: true
@@ -28,6 +24,6 @@ var scheduleSchema = new schema({
 	}
 	//add collection of events
 	/*events: Array*/
-})
+});
 
 module.exports = mongoose.model('schedule', scheduleSchema);
