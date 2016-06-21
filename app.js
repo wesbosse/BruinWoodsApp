@@ -11,12 +11,14 @@ require('./models/event');
 require('./models/schedule');
 require('./models/user');
 require('./models/info');
+require('./models/weather');
 
 var auth = require('./routes/auth')(passport);
 var eventsApi = require('./routes/eventsApi');
 var usersApi = require('./routes/usersApi');
 var schedulesApi = require('./routes/schedulesApi');
 var infosApi = require('./routes/infoApi');
+var weathersApi = require('./routes/weatherApi');
 
 var mongoose = require('mongoose');                         //add for Mongo support
 mongoose.connect("mongodb://localhost:27017/bruinwoods");             //connect to Mongo
@@ -44,6 +46,7 @@ app.use('/api', eventsApi);
 app.use('/api', usersApi);
 app.use('/api', schedulesApi);
 app.use('/api', infosApi);
+app.use('/api', weathersApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

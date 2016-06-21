@@ -19,7 +19,7 @@ var scheduleSchema = new schema({
 		type: Date,
 		required: true
 	},
-	events: [{
+	eventIds: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'events'
 	}]

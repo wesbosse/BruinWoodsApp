@@ -21,7 +21,10 @@ var infoSchema = new schema({
 	},
 	description: String,
 	order: Number,
-	schedules: Array
+	scheduleIds: [{
+		type: mongoose.Schema.Type.Objectid,
+		ref: 'schedule'
+	}]
 });
 
 module.exports = mongoose.model('info', infoSchema);
