@@ -3,10 +3,11 @@ var schema = mongoose.Schema;
 /*var Schedule = mongoose.model('schedule');*/
 
 var eventSchema = new schema({
-    description : {
+    name: {
         type: String,
         required: true
-    },
+    }
+    description: String,
     startTime: {
         type: Date,
         required: true
@@ -33,9 +34,10 @@ var eventSchema = new schema({
         required: true
     },
     //point to schedule
-   schedules: {
-        type: Array
-   },
+    schedules: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'schedule'
+    }]
 });
 
 //declares model event

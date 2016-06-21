@@ -51,7 +51,7 @@ router.route('/infos/:id')
 	})
 	//delete specific info
 	.delete(function(req, res) {
-		Info.remove({ _id: req.params.id}, function(err, event) {
+		Info.remove({ _id: req.params.id}, function(err, info) {
 			if (err) {
 				return res.send(err);
 			}

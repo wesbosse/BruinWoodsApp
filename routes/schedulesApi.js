@@ -17,7 +17,7 @@ router.use(function(req, res, next) {
 
 router.route('/schedules')
     .post(function(req, res) {
-        schedule = new Schedule();
+        var schedule = new Schedule();
         schedule.name = req.body.name;
         schedule.created_By = req.user.username;
         schedule.startDate = req.body.startDate;
@@ -30,5 +30,45 @@ router.route('/schedules')
             return res.json(schedule);
         })
     })
+    .get(function(req, res) {
+        Schedule.find(function(err, schedules) {
+            if (err) {
+                return res.send(500, err);
+            }
+            return res.json(schedules);
+        });
+    });
+
+router.route('/schedules/:id')
+    .delete(function(req, res) {
+        Schedule.remove({ _id: req.params.id }, function(err, schedule) {
+            if (err) {
+                return res.send(err);
+            }
+            req.json("deleted");
+        });
+    })
+    .put(function(req, res) {
+        Info.findById(req.params.id, function(err, schedule) {
+            if (err) {
+                return res.send(500, err);
+            }
+            schedule.name = req.body.name;
+            schedule.created_By = req.user.username;
+            schedule.startDate = req.body.description;
+            schedule.endDate = req.body.order;
+            schedule.events.push(req.body.events);
+        });
+    })
+    .get(function(req, res) {
+        Schedule.findById(req.params.id, function(err, schedule) {
+            if (err) {
+                return res.send(500, err);
+            } else {
+                return res.json(schedule);
+            }
+        });
+    });
+
 
 module.exports = router;
