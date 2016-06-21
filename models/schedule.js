@@ -19,11 +19,10 @@ var scheduleSchema = new schema({
 		type: Date,
 		required: true
 	},
-	events: {
-		type: Array
-	}
-	//add collection of events
-	/*events: Array*/
+	events: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'events'
+	}]
 });
 
 module.exports = mongoose.model('schedule', scheduleSchema);
