@@ -6,7 +6,7 @@ var eventSchema = new schema({
     name: {
         type: String,
         required: true
-    }
+    },
     description: String,
     startTime: {
         type: Date,
