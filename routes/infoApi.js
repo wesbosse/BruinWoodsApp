@@ -72,3 +72,5 @@ router.route('/infos/:id')
 			info.schedules.push(req.body.schedules);
 		});
 	});
+
+	module.exports = router;

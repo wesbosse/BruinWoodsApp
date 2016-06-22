@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
+/*/*var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 /*var Schedule = mongoose.model('schedule');*/
 
-var weatherSchema = new schema({
+//var weatherSchema = new schema({
 	//time updated
 
 	//wind
@@ -13,6 +13,6 @@ var weatherSchema = new schema({
 
 	//weekly forecast
 
-	)}
+	//)}
 
-module.exports = mongoose.mode('weather', scheduleSchema);
+//module.exports = mongoose.mode('weather', scheduleSchema);*/*/*/*/

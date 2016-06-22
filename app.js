@@ -20,8 +20,8 @@ var schedulesApi = require('./routes/schedulesApi');
 var infosApi = require('./routes/infoApi');
 var weathersApi = require('./routes/weatherApi');
 
-var mongoose = require('mongoose');                         //add for Mongo support
-mongoose.connect("mongodb://localhost:27017/bruinwoods");             //connect to Mongo
+var mongoose = require('mongoose');     // add for Mongo support
+mongoose.connect("mongodb://localhost:27017/bruinwoods");             // connect to Mongo
 var app = express();
 
 // view engine setup
@@ -46,7 +46,7 @@ app.use('/api', eventsApi);
 app.use('/api', usersApi);
 app.use('/api', schedulesApi);
 app.use('/api', infosApi);
-app.use('/api', weathersApi);
+//app.use('/api', weathersApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

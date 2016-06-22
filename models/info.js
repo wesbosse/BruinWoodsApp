@@ -22,7 +22,7 @@ var infoSchema = new schema({
 	description: String,
 	order: Number,
 	scheduleIds: [{
-		type: mongoose.Schema.Type.Objectid,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'schedule'
 	}]
 });
