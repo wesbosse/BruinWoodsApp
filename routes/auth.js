@@ -5,7 +5,7 @@ module.exports = function(passport) {
 
     //sends successful login state back to angular
     router.get('/success', function(req, res) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
+        console.log(req)
         res.json({ state: 'success', user: req.user.username ? req.user : null });
     });
 
@@ -15,16 +15,22 @@ module.exports = function(passport) {
     });
 
     //log in
-    router.post('/login', passport.authenticate('local', {
+    router.post('/login', passport.authenticate('local'/*, {
         successRedirect: '/auth/success',
         failureRedirect: '/auth/failure'
-    }));
+    }*/),function(req,res) {
+        res.json({ state: 'success', user: req.user.username ? req.user : null });
+    });
 
     //sign up
-    router.post('/signup', passport.authenticate('signup', {
+    router.post('/signup', passport.authenticate('signup'/*, {
         successRedirect: '/auth/success',
         failureRedirect: '/auth/failure'
-    }));
+        successFlash: true,
+        failureFlash: true
+    }*/),function(req,res) {
+        res.json({ state: 'success', user: req.user.username ? req.user : null });
+    });
 
     //log out
     router.get('/signout', function(req, res) {
