@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -23,6 +24,20 @@ var weathersApi = require('./routes/weatherApi');
 var mongoose = require('mongoose');     // add for Mongo support
 mongoose.connect("mongodb://localhost:27017/bruinwoods");             // connect to Mongo
 var app = express();
+
+app.options('*', cors());
+
+app.use(cors());
+
+app.use(function (req, res, next) {
+ res.header('Access-Control-Allow-Origin', '*'); // * => allow all origins
+ res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
+ res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Requested-With, Accept'); // add remove headers according to your needs
+ next();
+});
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

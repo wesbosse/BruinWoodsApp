@@ -5,7 +5,8 @@ module.exports = function(passport) {
 
     //sends successful login state back to angular
     router.get('/success', function(req, res) {
-        res.send({ state: 'success', user: req.user.username ? req.user : null });
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.json({ state: 'success', user: req.user.username ? req.user : null });
     });
 
     //sends failure login state back to angular
