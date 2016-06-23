@@ -14,13 +14,30 @@ var userSchema = new schema({
     	required: true 
     },
     password: { 
-    	type: String, 
-    	required: true 
+    	type: String
     },
     role: {
         type: String,
         required: true
-    },//*,
+    },
+    facebook: {
+        fbid:{
+            type: String,
+            trim: true
+        },
+        token:{
+            type: String
+        },
+        displayName:{
+            type: String
+        },
+        email:{
+            type: String
+        },
+        profileUrl:{
+            type: String
+        }
+    },
     eventIds: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'events'

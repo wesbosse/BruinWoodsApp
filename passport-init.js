@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('user');
 var LocalStrategy = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+var FacebookTokenStrategy = require('passport-facebook-token');
 var bCrypt = require('bcrypt-nodejs');
 
 module.exports = function(passport) {
@@ -9,13 +9,11 @@ module.exports = function(passport) {
     // Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, done) {
         //tell passport which id to use for user
-        console.log('serializing user:', user.username);
         return done(null, user._id);
     });
 
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
-            console.log('deserializing user:', user.username);
             //return user object back 
             return done(err, user);
         });
@@ -88,17 +86,58 @@ module.exports = function(passport) {
             });
         }));
 
-    passport.use('facebook', new FacebookStrategy({
-            clientID: "1195445567162414",
-            clientSecret: "df71659b48405972e15a601d75f3a50b",
-            callbackURL: "http://localhost:3000/auth/facebook/callback"
-        },
-        function(accessToken, refreshToken, profile, cb) {
-            User.findOrCreate({ facebookId: profile.id }, function(err, user) {
-                return cb(err, user);
-            });
-        }
-    ));
+    passport.use(new FacebookTokenStrategy({
+        clientID: "1195445567162414",
+        clientSecret: "df71659b48405972e15a601d75f3a50b"
+    }, function(accessToken, refreshToken, profile, done) {
+        User.findOne({ 'facebook.fbid': profile.id }, function(err, user) {
+            console.log(profile);
+            if (err) return done(err);
+            if (user) {
+                done(null, user);
+            } else {
+                user = new User();
+
+                console.log(profile);
+
+                user.username = profile.emails[0].value;
+                user.facebook.token = accessToken;
+                user.facebookprofileUrl = profile.profileUrl;
+                user.facebook.email = profile.emails[0].value;
+                user.facebook.fbid = profile.id;
+                user.facebook.displayName = profile.displayName;
+                user.firstname = profile.name.givenName;
+                user.lastname = profile.name.familyName;
+                user.role = 'user';
+
+                user.save(function(err) {
+                    if (err) return done(err);
+                    done(null, user);
+                });
+            }
+        });
+    }));
+
+    // passport.use('facebook', new FacebookStrategy({
+    //     clientID: "",
+    //     clientSecret: "",
+    //     callbackURL: "http://localhost:3000/auth/facebook/callback"
+    // }, function(accessToken, refreshToken, profile, done) {
+    //     process.nextTick(function() {
+    //         User.findOne({ 'facebook.fbid': profile.id }, function(err, user) {
+    //             console.log(profile);
+    //             if (err) return done(err);
+    //             if (user) {
+    //                 done(null, user);
+    //             } else {
+    //                 
+
+    //                 
+    //             }
+    //         });
+    //     });
+    // }));
+
 
     var isValidPassword = function(user, password) {
         return bCrypt.compareSync(password, user.password);

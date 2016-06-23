@@ -5,7 +5,7 @@ module.exports = function(passport) {
 
     //sends successful login state back to angular
     router.get('/success', function(req, res) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
+        console.log(req);
         res.json({ state: 'success', user: req.user.username ? req.user : null });
     });
 
@@ -15,16 +15,22 @@ module.exports = function(passport) {
     });
 
     //log in
-    router.post('/login', passport.authenticate('local', {
+    router.post('/login', passport.authenticate('local'/*, {
         successRedirect: '/auth/success',
         failureRedirect: '/auth/failure'
-    }));
+    }*/),function(req,res) {
+        res.json({ state: 'success', user: req.user.username ? req.user : null });
+    });
 
     //sign up
-    router.post('/signup', passport.authenticate('signup', {
+    router.post('/signup', passport.authenticate('signup'/*, {
         successRedirect: '/auth/success',
         failureRedirect: '/auth/failure'
-    }));
+        successFlash: true,
+        failureFlash: true
+    }*/),function(req,res) {
+        res.json({ state: 'success', user: req.user.username ? req.user : null });
+    });
 
     //log out
     router.get('/signout', function(req, res) {
@@ -32,15 +38,19 @@ module.exports = function(passport) {
         res.redirect('/');
     });
 
-    router.get('/facebook',
-        passport.authenticate('facebook'));
-
-    router.get('/auth/facebook/callback',
-        passport.authenticate('facebook', { failureRedirect: '/login' }),
+    router.post('/cameroniscool', 
+        passport.authenticate(['facebook-token', 'local']),
         function(req, res) {
-            // Successful authentication, redirect home.
-            res.redirect('/auth/success');
+            res.send(req.user ? 200 : 401);
         });
+
+    router.post('/facebook/token',
+      passport.authenticate('facebook-token'),
+      function (req, res) {
+        // do something with req.user
+        res.send(req.user? 200 : 401);
+      }
+    );
 
     return router;
 
