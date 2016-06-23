@@ -5,7 +5,7 @@ module.exports = function(passport) {
 
     //sends successful login state back to angular
     router.get('/success', function(req, res) {
-        console.log(req)
+        console.log(req);
         res.json({ state: 'success', user: req.user.username ? req.user : null });
     });
 
@@ -38,15 +38,19 @@ module.exports = function(passport) {
         res.redirect('/');
     });
 
-    router.get('/facebook',
-        passport.authenticate('facebook'));
-
-    router.get('/auth/facebook/callback',
-        passport.authenticate('facebook', { failureRedirect: '/login' }),
+    router.post('/cameroniscool', 
+        passport.authenticate(['facebook-token', 'local']),
         function(req, res) {
-            // Successful authentication, redirect home.
-            res.redirect('/auth/success');
+            res.send(req.user ? 200 : 401);
         });
+
+    router.post('/facebook/token',
+      passport.authenticate('facebook-token'),
+      function (req, res) {
+        // do something with req.user
+        res.send(req.user? 200 : 401);
+      }
+    );
 
     return router;
 

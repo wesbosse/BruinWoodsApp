@@ -1,30 +1,24 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 var mongoose = require('mongoose');
 var Event = mongoose.model('event');
 
-router.use(function(req, res, next) {
-    if (!req.isAuthenticated()) {
-        res.redirect('/#/login');
-    }
-    //if user authenticated send to next middleware or handler
-    else {
-        return next();
-    }
-});
 router.route('/events')
 
 //returns all events
-.get(function(req, res) {
-    Event.find(function(err, data) {
-        if (err) {
-            res.send(500, err);
-        }
-        console.log(data);
-        return res.send(data);
-    });
-
-})
+.get(
+    passport.authenticate(['local', 'facebook-token']),
+    function(req, res) {
+        Event.find(function(err, data) {
+            if (err) {
+                res.send(500, err);
+            }
+            console.log(data);
+            return res.send(data);
+        });
+    }
+)
 
 .post(function(req, res) {
     var event = new Event();
@@ -47,16 +41,17 @@ router.route('/events/:id')
 
 //returns one event
 .get(function(req, res) {
+    isLoggedIn,
     Event.findById(req.params.id)
-        .populate('scheduleIds')
-        .exec(function(error, schedules) {
-            console.log(JSON.stringify(schedules, null, "\t"))
-        }).then(function(err, event) {
-            if (err) {
-                return res.send(err);
-            }
-            res.send(event);
-        });
+    .populate('scheduleIds')
+    .exec(function(error, schedules) {
+        console.log(JSON.stringify(schedules, null, "\t"))
+    }).then(function(err, event) {
+        if (err) {
+            return res.send(err);
+        }
+        res.send(event);
+    });
 })
 
 // post.save(function(error) {
@@ -99,5 +94,16 @@ router.route('/events/:id')
         res.json("deleted");
     });
 });
+
+function isLoggedIn(req, res, next) {
+    console.log('checking if somebody is logged in');
+
+    console.log(req.isAuthenticated());
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.send(401);
+    }
+}
 
 module.exports = router;
