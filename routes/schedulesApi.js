@@ -15,7 +15,7 @@ router.use(function(req, res, next) {
     }
 });
 
-router.route('/schedules')
+router.route('/')
     .post(function(req, res) {
         var schedule = new Schedule();
         schedule.name = req.body.name;
@@ -39,7 +39,7 @@ router.route('/schedules')
         });
     });
 
-router.route('/schedules/:id')
+router.route('/:id')
     .delete(function(req, res) {
         Schedule.remove({ _id: req.params.id }, function(err, schedule) {
             if (err) {

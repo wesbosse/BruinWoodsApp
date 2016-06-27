@@ -15,7 +15,7 @@ router.use(function(req, res) {
 	}
 });
 
-router.route('/infos')
+router.route('/')
 	//get all info
 	.get(function(req, res) {
 		Info.find(function(err, infos) {
@@ -37,7 +37,7 @@ router.route('/infos')
 		info.schedules.push(req.body.schedules);
 	});
 
-router.route('/infos/:id')
+router.route('/:id')
 	//get specific info
 	.get(function(req, res) {
 		Info.findById(req.params.id, function(err, info) {
