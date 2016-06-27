@@ -7,8 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
+var Forecast = require('forecast');
 
-//initialize mongoose schemas
+// Initialize mongoose schemas
 require('./models/event');
 require('./models/schedule');
 require('./models/user');
@@ -20,7 +21,7 @@ var eventsApi = require('./routes/eventsApi');
 var usersApi = require('./routes/usersApi');
 var schedulesApi = require('./routes/schedulesApi');
 var infosApi = require('./routes/infoApi');
-var weathersApi = require('./routes/weatherApi');
+var weatherApi = require('./routes/weatherApi');
 
 var mongoose = require('mongoose'); // add for Mongo support
 mongoose.connect("mongodb://localhost:27017/bruinwoods"); // connect to Mongo
@@ -47,11 +48,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', auth);
-app.use('/api', eventsApi);
-app.use('/api', usersApi);
-app.use('/api', schedulesApi);
-app.use('/api', infosApi);
-//app.use('/api', weathersApi);
+
+var apiRouter = express.Router();
+
+apiRouter.use('/events', eventsApi);
+apiRouter.use('/users', usersApi);
+apiRouter.use('/schedules', schedulesApi);
+apiRouter.use('/infos', infosApi);
+apiRouter.use('/weather', weatherApi);
+
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

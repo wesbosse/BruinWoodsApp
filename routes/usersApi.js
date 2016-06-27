@@ -12,7 +12,7 @@ router.use(function(req, res, next) {
     }
 });
 
-router.route('/users')
+router.route('/')
     .get(function(req, res) {
         User.findById(req.user.id, function(err, user) {
             if (err || !user) {
@@ -29,7 +29,7 @@ router.route('/users')
     });*/
 
 
-router.route('/users/:eventId')
+router.route('/:eventId')
     .put(function(req, res) {
 
     	/*User.find( {username: req.user.id } )

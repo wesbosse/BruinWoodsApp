@@ -4,7 +4,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var Event = mongoose.model('event');
 
-router.route('/events')
+router.route('/')
 
 //returns all events
 .get(
@@ -37,7 +37,7 @@ router.route('/events')
     });
 });
 
-router.route('/events/:id')
+router.route('/:id')
 
 //returns one event
 .get(function(req, res) {
