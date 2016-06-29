@@ -9,7 +9,7 @@ router.route('/')
 
 //returns all events
 .get(
-    passport.authenticate(['local', 'facebook-token']),
+    isLoggedIn,
     function(req, res) {
         Event.find(function(err, data) {
             if (err) {
@@ -21,7 +21,9 @@ router.route('/')
     }
 )
 
-.post(function(req, res) {
+.post(
+    isLoggedIn,
+    function(req, res) {
     var event = new Event();
     event.name = req.body.name;
     event.description = req.body.description;
@@ -84,7 +86,8 @@ router.route('/:id')
 // });
 
 //updates an event
-.put(function(req, res) {
+.put(isLoggedIn,
+    function(req, res) {
     Event.findById(req.params.id, function(err, event) {
         if (err) {
             return res.send(err);
@@ -105,7 +108,8 @@ router.route('/:id')
 })
 
 //deletes an event
-.delete(function(req, res) {
+.delete(isLoggedIn,
+    function(req, res) {
     Event.remove({ _id: req.params.id }, function(err, event) {
         if (err) {
             return res.send(err);
@@ -115,9 +119,6 @@ router.route('/:id')
 });
 
 function isLoggedIn(req, res, next) {
-    console.log('checking if somebody is logged in');
-
-    console.log(req.isAuthenticated());
     if (req.isAuthenticated()) {
         next();
     } else {

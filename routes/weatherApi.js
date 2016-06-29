@@ -20,7 +20,7 @@ router.get('/', function(req, res) {
 
     forecast.get([34.2653, -117.1865], function(err, weather) {
         if (err) return console.dir(err);
-        console.dir(weather);
+        /*console.dir(weather);*/
 
         res.send(weather);
     });
