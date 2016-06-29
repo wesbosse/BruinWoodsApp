@@ -14,7 +14,6 @@ require('./models/event');
 require('./models/schedule');
 require('./models/user');
 require('./models/info');
-require('./models/weather');
 
 var auth = require('./routes/auth')(passport);
 var eventsApi = require('./routes/eventsApi');
@@ -26,7 +25,6 @@ var weatherApi = require('./routes/weatherApi');
 var mongoose = require('mongoose'); // add for Mongo support
 mongoose.connect("mongodb://localhost:27017/bruinwoods"); // connect to Mongo
 var app = express();
-
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); // * => allow all origins
