@@ -21,7 +21,7 @@ var scheduleSchema = new schema({
 	},
 	eventIds: [{
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'events'
+		ref: 'event'
 	}]
 });
 
