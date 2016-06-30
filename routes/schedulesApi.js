@@ -4,10 +4,11 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var Schedule = mongoose.model('schedule');
 var Event = mongoose.model('event');
-
+var expressJwt = require('express-jwt');
+var authenticate = expressJwt({secret : 'keyboard cat'});
 
 router.route('/')
-    .post(isLoggedIn,
+    .post(authenticate,
         function(req, res) {
             var schedule = new Schedule();
             schedule.name = req.body.name;
@@ -22,7 +23,7 @@ router.route('/')
                 return res.status(200).json(schedule);
             });
         })
-    .get(isLoggedIn,
+    .get(authenticate,
         function(req, res) {
             Schedule.find({})
                 .populate('eventIds')

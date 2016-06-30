@@ -1,4 +1,4 @@
-var express = require('express');
+ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var mongoose = require('mongoose');
@@ -49,9 +49,9 @@ router.route('/')
                 if (err) {
                     return res.status(500).json(err);
                 }
-            })
-        })
-    })
+            });
+        });
+    });
 
 
 
