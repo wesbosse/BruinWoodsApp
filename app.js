@@ -29,7 +29,7 @@ var app = express();
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); // * => allow all origins
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Requested-With, Accept'); // add remove headers according to your needs
+    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Requested-With, Accept, Authorization'); // add remove headers according to your needs
     next();
 });
 
