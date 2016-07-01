@@ -4,11 +4,13 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var Schedule = mongoose.model('schedule');
 var Event = mongoose.model('event');
-var expressJwt = require('express-jwt');
-var authenticate = expressJwt({secret : 'keyboard cat'});
 
 router.route('/')
-    .post(authenticate,
+    /*.options(function(req, res, next) {
+        res.status(200).end();
+        next();
+    })*/
+    .post(passport.authenticate(['jwt']),
         function(req, res) {
             var schedule = new Schedule();
             schedule.name = req.body.name;
@@ -23,7 +25,7 @@ router.route('/')
                 return res.status(200).json(schedule);
             });
         })
-    .get(authenticate,
+    .get(passport.authenticate(['jwt', 'facebook-token'], { session: false}),
         function(req, res) {
             Schedule.find({})
                 .populate('eventIds')
@@ -38,7 +40,7 @@ router.route('/')
         });
 
 router.route('/:id')
-    .delete(isLoggedIn,
+    .delete(
         function(req, res) {
             Schedule.remove({ _id: req.params.id }, function(err, schedule) {
                 if (err) {
@@ -47,7 +49,7 @@ router.route('/:id')
                 req.json("deleted");
             });
         })
-    .put(isLoggedIn,
+    .put(
         function(req, res) {
             Info.findById(req.params.id, function(err, schedule) {
                 if (err) {
@@ -61,7 +63,7 @@ router.route('/:id')
                 return res.status(200);
             });
         })
-    .get(isLoggedIn,
+    .get(
         function(req, res) {
             Schedule.findById(req.params.id)
                 .populate('eventIds')

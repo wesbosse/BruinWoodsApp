@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var jwt = require('jsonwebtoken');
+var jwt = require('jwt-simple');
+var JwtStrategy = require('passport-jwt').Strategy;
 
 module.exports = function(passport) {
 
@@ -21,12 +22,8 @@ module.exports = function(passport) {
             session: false
         }),
         function(req, res) {
-            req.token = jwt.sign({
-                id: req.user.id,
-            }, 'keyboard cat', {
-                expiresIn: "120 days"
-            });
-            res.status(200).json({ state: 'success', token: req.token, user: req.user.username ? req.user : null });
+            var token = jwt.encode(req.user._id, 'keyboard cat');
+            res.status(200).json({ state: 'success', token: token, user: req.user.username ? req.user : null });
         });
 
     //sign up
@@ -42,7 +39,7 @@ module.exports = function(passport) {
         res.redirect('/');
     });
 
-    router.post('/facebook/token',
+    router.post('/facebook/token/',
         passport.authenticate('facebook-token'),
         function(req, res) {
             // do something with req.user

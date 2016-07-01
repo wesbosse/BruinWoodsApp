@@ -3,7 +3,8 @@ var User = mongoose.model('user');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookTokenStrategy = require('passport-facebook-token');
 var bCrypt = require('bcrypt-nodejs');
-
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 module.exports = function(passport) {
 
@@ -15,6 +16,19 @@ module.exports = function(passport) {
 
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
+            if (err) {
+                return done(err)
+            }
+            if (user) {
+                done(null, user);
+            } else {
+                Users.find({ 'facebook.fbid': profile.id }, function(err, ser) {
+                    if (err) {
+                        return done(err);
+                    }
+                    return done(null, user);
+                })
+            }
             //return user object back 
             return done(err, user);
         });
@@ -42,12 +56,29 @@ module.exports = function(passport) {
                         return done(null, false); // redirect back to login page
                     }
                     // User and password both match, return user from done method
-                    // which will be treated like success
+                    // which will be treated like success                   
                     return done(null, user);
                 }
             );
         }
     ));
+
+    var opts = {}
+    opts.jwtFromRequest = ExtractJwt.fromHeader('access_token');
+    opts.secretOrKey = 'keyboard cat';
+    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+        User.findOne({ _id: jwt_payload }, function(err, user) {
+            if (err) {
+                return done(err, false);
+            }
+            if (user) {
+                done(null, user);
+            } else {
+                done(null, false);
+                // or you could create a new account
+            }
+        });
+    }));
 
     passport.use('signup', new LocalStrategy({
             passReqToCallback: true // allows us to pass back the entire request to the callback
@@ -58,12 +89,10 @@ module.exports = function(passport) {
             User.findOne({ 'username': username }, function(err, user) {
                 // In case of any error, return using the done method
                 if (err) {
-                    console.log('Error in SignUp: ' + err);
                     return done(err);
                 }
                 // already exists
                 if (user) {
-                    console.log('User already exists with username: ' + username);
                     return done(null, false);
                 } else {
                     // if there is no user, create the user
@@ -77,10 +106,8 @@ module.exports = function(passport) {
                     // save the user
                     newUser.save(function(err) {
                         if (err) {
-                            console.log('Error in Saving user: ' + err);
                             throw err;
                         }
-                        console.log(newUser.username + ' Registration succesful');
                         return done(null, newUser);
                     });
                 }
@@ -92,14 +119,11 @@ module.exports = function(passport) {
         clientSecret: "df71659b48405972e15a601d75f3a50b"
     }, function(accessToken, refreshToken, profile, done) {
         User.findOne({ 'facebook.fbid': profile.id }, function(err, user) {
-            console.log(profile);
             if (err) return done(err);
             if (user) {
                 done(null, user);
             } else {
                 user = new User();
-
-                console.log(profile);
 
                 user.username = profile.emails[0].value;
                 user.facebook.token = accessToken;
@@ -118,27 +142,6 @@ module.exports = function(passport) {
             }
         });
     }));
-
-    // passport.use('facebook', new FacebookStrategy({
-    //     clientID: "",
-    //     clientSecret: "",
-    //     callbackURL: "http://localhost:3000/auth/facebook/callback"
-    // }, function(accessToken, refreshToken, profile, done) {
-    //     process.nextTick(function() {
-    //         User.findOne({ 'facebook.fbid': profile.id }, function(err, user) {
-    //             console.log(profile);
-    //             if (err) return done(err);
-    //             if (user) {
-    //                 done(null, user);
-    //             } else {
-    //                 
-
-    //                 
-    //             }
-    //         });
-    //     });
-    // }));
-
 
     var isValidPassword = function(user, password) {
         return bCrypt.compareSync(password, user.password);
