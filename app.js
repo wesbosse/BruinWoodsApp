@@ -29,21 +29,22 @@ var app = express();
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); // * => allow all origins
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Requested-With, Accept, Authorization'); // add remove headers according to your needs
+    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Requested-With, Accept, Authorization, access_token'); // add remove headers according to your needs
     next();
 });
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(session({
+/*app.use(session({
     secret: 'keyboard cat'
-}));
+}));*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(passport.initialize());
-app.use(passport.session());
+/*app.use(passport.session());*/
 
 app.use('/auth', auth);
 
