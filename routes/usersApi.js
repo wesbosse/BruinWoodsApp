@@ -3,17 +3,11 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Event = mongoose.model('event');
 var User = mongoose.model('user');
-
-router.use(function(req, res, next) {
-    if (!req.Authenticated) {
-        res.redirect('/#/login');
-    } else {
-        return next();
-    }
-});
+var passport = require('passport');
 
 router.route('/')
-    .get(function(req, res) {
+    .get(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+        function(req, res) {
         User.findById(req.user.id, function(err, user) {
             if (err || !user) {
                 return res.send(500, err);
@@ -30,7 +24,8 @@ router.route('/')
 
 
 router.route('/:eventId')
-    .put(function(req, res) {
+    .put(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+        function(req, res) {
 
     	/*User.find( {username: req.user.id } )
     		.then(function() {

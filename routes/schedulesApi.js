@@ -10,7 +10,7 @@ router.route('/')
         res.status(200).end();
         next();
     })*/
-    .post(passport.authenticate(['jwt']),
+    .post(passport.authenticate(['jwt', 'facebook-token'], { session: false}),
         function(req, res) {
             var schedule = new Schedule();
             schedule.name = req.body.name;
@@ -40,7 +40,7 @@ router.route('/')
         });
 
 router.route('/:id')
-    .delete(
+    .delete(passport.authenticate(['jwt', 'facebook-token'], { session: false}),
         function(req, res) {
             Schedule.remove({ _id: req.params.id }, function(err, schedule) {
                 if (err) {
@@ -49,7 +49,7 @@ router.route('/:id')
                 req.json("deleted");
             });
         })
-    .put(
+    .put(passport.authenticate(['jwt', 'facebook-token'], { session: false}),
         function(req, res) {
             Info.findById(req.params.id, function(err, schedule) {
                 if (err) {
@@ -63,7 +63,7 @@ router.route('/:id')
                 return res.status(200);
             });
         })
-    .get(
+    .get(passport.authenticate(['jwt', 'facebook-token'], { session: false}),
         function(req, res) {
             Schedule.findById(req.params.id)
                 .populate('eventIds')
@@ -75,13 +75,5 @@ router.route('/:id')
                     }
                 });
         });
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.send(401);
-    }
-}
 
 module.exports = router;
