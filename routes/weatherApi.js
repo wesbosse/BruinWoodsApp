@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Forecast = require('forecast');
-
+var passport = required('passport');
 
 // Initialize Forecast 
 
@@ -16,13 +16,15 @@ var forecast = new Forecast({
     }
 });
 
-router.get('/', function(req, res) {
+router.get('/',
+    passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+    function(req, res) {
 
-    forecast.get([34.2653, -117.1865], function(err, weather) {
-        if (err) return console.dir(err);
-        /*console.dir(weather);*/
+        forecast.get([34.2653, -117.1865], function(err, weather) {
+            if (err) return console.dir(err);
+            /*console.dir(weather);*/
 
-        res.send(weather);
+            res.send(weather);
+        });
     });
-});
 module.exports = router;

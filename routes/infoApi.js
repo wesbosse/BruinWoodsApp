@@ -1,23 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var passport = require('passport');
 var Info = mongoose.model('info');
-
-//authorization.
-router.use(function(req, res) {
-	//if not logged on redirect to login
-	if (!req.isAuthenticated) {
-		res.redirect('/#/login');
-	}
-	//go to next item
-	else {
-		return next();
-	}
-});
 
 router.route('/')
 	//get all info
-	.get(function(req, res) {
+	.get(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+		function(req, res) {
 		Info.find(function(err, infos) {
 			if (err) {
 				return res.send(500, err);
@@ -27,7 +17,8 @@ router.route('/')
 	})
 
 	//create new info
-	.post(function(req, res) {
+	.post(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+		function(req, res) {
 		var info = new Info();
 		info.name = req.body.name;
 		info.created_by = req.user.username;
@@ -39,7 +30,8 @@ router.route('/')
 
 router.route('/:id')
 	//get specific info
-	.get(function(req, res) {
+	.get(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+		function(req, res) {
 		Info.findById(req.params.id, function(err, info) {
 			if (err) {
 				return res.send(500, err);
@@ -50,7 +42,8 @@ router.route('/:id')
 		});
 	})
 	//delete specific info
-	.delete(function(req, res) {
+	.delete(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+		function(req, res) {
 		Info.remove({ _id: req.params.id}, function(err, info) {
 			if (err) {
 				return res.send(err);
@@ -60,7 +53,8 @@ router.route('/:id')
 	})
 
 	//edit specific info
-	.put(function(req, res) {
+	.put(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
+		function(req, res) {
 		Info.findById(req.params.id, function(err, info) {
 			if (err) {
 				return res.send(500, err);

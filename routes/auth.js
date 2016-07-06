@@ -5,17 +5,6 @@ var JwtStrategy = require('passport-jwt').Strategy;
 
 module.exports = function(passport) {
 
-    //sends successful login state back to angular
-    router.get('/success', function(req, res) {
-        console.log(req);
-        res.json({ state: 'success', user: req.user.username ? req.user : null });
-    });
-
-    //sends failure login state back to angular
-    router.get('/failure', function(req, res) {
-        res.send({ state: 'failure', user: null, message: "Invalid username or password" });
-    });
-
     //log in
     router.post('/login',
         passport.authenticate('local', {
