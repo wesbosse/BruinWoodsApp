@@ -8,7 +8,7 @@ router.route('/')
 	//get all info
 	.get(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
 		function(req, res) {
-		Info.find(function(err, infos) {
+		Info.find({}, function(err, infos) {
 			if (err) {
 				return res.send(500, err);
 			}
@@ -22,11 +22,47 @@ router.route('/')
 		var info = new Info();
 		info.name = req.body.name;
 		info.created_by = req.user.username;
+		info.created_date = Date.now();
 		info.url = req.body.url;
 		info.description = req.body.description;
 		info.order = req.body.order;
-		info.schedules.push(req.body.schedules);
+		info.active = req.body.active;
+		info.type = req.body.type;
+		info.save(function(err, newInfo){
+			if (err) {
+				return res.status(500).json(err);
+			}else {
+				return res.status(200).json(info);
+			}
+		})
+		/*info.schedules.push(req.body.schedules);*/
 	});
+
+router.route('/active')
+	.get(passport.authenticate(['jwt', 'facebook-token'], {session: false}),
+		function(req, res){
+			Info.find({active: true}, function(err, infos){
+				if (err) {
+					return res.status(500).json("error");
+				}
+				else {
+					return res.status(200).json(infos);
+				}
+			});
+		})
+	.put(passport.authenticate(['jwt', 'facebook-token'], {session: false}),
+		function(req, res){
+			req.infos.forEach(function(item){
+				Info.find({name: item.name}, function(err, info){
+					info.active = item.active;
+					info.save(function(err, success) {
+						if (err) {
+							return res.status(500).json(err);
+						}
+					});
+				});
+			});
+		});
 
 router.route('/:id')
 	//get specific info
@@ -64,6 +100,13 @@ router.route('/:id')
 			info.description = req.body.description;
 			info.order = req.body.order;
 			info.schedules.push(req.body.schedules);
+			info.save(function(err, success){
+				if (err) {
+					res.status(500).json(err);
+				}else {
+					res.status(200).json(info);
+				}
+			})
 		});
 	});
 

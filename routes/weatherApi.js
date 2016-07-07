@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Forecast = require('forecast');
-var passport = required('passport');
+var passport = require('passport');
 
 // Initialize Forecast 
 

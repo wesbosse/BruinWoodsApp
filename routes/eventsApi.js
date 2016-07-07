@@ -74,17 +74,6 @@
      });
  })
 
- // post.save(function(error) {
- //     if (!error) {
- //         Post.find({})
- //             .populate('postedBy')
- //             .populate('comments.postedBy')
- //             .exec(function(error, posts) {
- //                 console.log(JSON.stringify(posts, null, "\t"))
- //             })
- //     }
- // });
-
  //updates an event
  .put(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
      function(req, res) {
