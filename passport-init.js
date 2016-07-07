@@ -40,7 +40,7 @@ module.exports = function(passport) {
         function(req, username, password, done) {
             console.log("hello!");
             // check in mongo if a user with username exists or not
-            User.findOne({ 'username': username },
+            User.findOne({ 'username': username.toLowerCase() },
                 function(err, user) {
                     // In case of any error, return using the done method
                     if (err)
@@ -99,7 +99,7 @@ module.exports = function(passport) {
                     var newUser = new User();
 
                     // set the user's local credentials
-                    newUser.username = username;
+                    newUser.username = username.toLowerCase();
                     newUser.password = createHash(password);
                     newUser.role = "user";
 

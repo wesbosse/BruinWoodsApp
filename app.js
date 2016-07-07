@@ -21,9 +21,13 @@ var usersApi = require('./routes/usersApi');
 var schedulesApi = require('./routes/schedulesApi');
 var infosApi = require('./routes/infoApi');
 var weatherApi = require('./routes/weatherApi');
+var configAuth = require('./configAuth.js');
 
 var mongoose = require('mongoose'); // add for Mongo support
-mongoose.connect("mongodb://localhost:27017/bruinwoods"); // connect to Mongo
+/*mongoose.connect("mongodb://localhost:27017/bruinwoods");*/ // connect to Mongo
+var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+                replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };    
+mongoose.connect(configAuth.mLab.url, options);
 var app = express();
 
 app.use(function(req, res, next) {
