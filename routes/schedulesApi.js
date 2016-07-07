@@ -60,7 +60,14 @@ router.route('/:id')
                 schedule.startDate = req.body.description;
                 schedule.endDate = req.body.order;
                 schedule.eventIds.push(req.body.eventIds);
-                return res.status(200);
+                schedule.save(function(err, success){
+                    if (err){
+                        return res.status(500).json(err);
+                    }else {
+                        return res.status(200);
+                    }
+                });
+
             });
         })
     .get(passport.authenticate(['jwt', 'facebook-token'], { session: false}),

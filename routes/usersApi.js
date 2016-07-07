@@ -15,29 +15,24 @@ router.route('/')
             return res.json(user);
         });
     });
-    //TODO: Implement put request
-    /*.put(function(req, res) {
-        User.find({username : req.user.username}, function(err, user) {
-
-        })
-    });*/
 
 
 router.route('/:eventId')
     .put(passport.authenticate(['jwt', 'facebook-token'], { session: false }),
         function(req, res) {
-
-    	/*User.find( {username: req.user.id } )
-    		.then(function() {
-
-    		});*/
-
         User.find({username: req.user._id}, function(err, user) {
             Event.findById(req.params.eventId, function(err, event) {
                 if (err || !event) {
                     return res.send(500);
                 }
                 user.events.push(event);
+                user.save(function(err, sucess){
+                    if (err) {
+                        return res.status(500);
+                    }else {
+                        return res.status(200);
+                    }
+                })
                 return res.json(user.events._id);
             });
         });
