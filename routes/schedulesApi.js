@@ -17,6 +17,7 @@ router.route('/')
             schedule.created_by = req.user.username;
             schedule.startDate = req.body.startDate;
             schedule.endDate = req.body.endDate;
+            schedule.active = req.body.active;
 
             schedule.save(function(err, schedule) {
                 if (err) {
@@ -27,7 +28,7 @@ router.route('/')
         })
     .get(passport.authenticate(['jwt', 'facebook-token'], { session: false}),
         function(req, res) {
-            Schedule.find({})
+            Schedule.find({active: true})
                 .populate('eventIds')
                 .exec(function(err, schedules) {
                     if (err) {

@@ -19,6 +19,10 @@ var scheduleSchema = new schema({
 		type: Date,
 		required: true
 	},
+	active: {
+		type: Boolean,
+		required: true
+	},
 	eventIds: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'event'
