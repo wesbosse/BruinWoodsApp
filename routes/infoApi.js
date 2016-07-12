@@ -84,7 +84,7 @@ router.route('/:id')
 			if (err) {
 				return res.send(err);
 			}
-			req.json("deleted");
+			res.status(200).json("deleted");
 		});
 	})
 
