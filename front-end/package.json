@@ -1,0 +1,30 @@
+{
+  "name": "bruinwoodswebportal",
+  "version": "1.0.0",
+  "description": "admin portal for managaing the BW app content",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesbosse/BruinWoodsWebPortal.git"
+  },
+  "author": "wesbosse, jiminjun, israel-gonzalez, noah-campbell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wesbosse/BruinWoodsWebPortal/issues"
+  },
+  "homepage": "https://github.com/wesbosse/BruinWoodsWebPortal#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "bower": "^1.7.9",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^4.1.0",
+    "gulp-inject": "^4.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-open": "^2.0.0",
+    "wiredep": "^4.0.0"
+  },
+  "devDependencies": {}
+}
